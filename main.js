@@ -168,16 +168,7 @@ class ServiceNowAdapter extends EventEmitter {
                         body = JSON.parse(data.body);
                         let result = body.result;
                         result.forEach((obj, index) => {
-                            result[index] = getResult(obj);
-                            // {
-                            //     'change_ticket_key': obj.sys_id,
-                            //     'change_ticket_number': obj.number,
-                            //     'active': obj.active,
-                            //     'priority': obj.priority,
-                            //     'description': obj.description,
-                            //     'work_start': obj.work_start,
-                            //     'work_end': obj.work_end
-                            // }
+                            result[index] = this.getResult(obj);
                         });
                         log.info("Retunring " + JSON.stringify(result))
                         callback(result);
@@ -209,16 +200,7 @@ class ServiceNowAdapter extends EventEmitter {
                     if (data.body) {
                         let body = JSON.parse(data.body);
                         result = body.result;
-                        result = getResult(result);
-                        // {
-                        //     'change_ticket_key': result.sys_id,
-                        //     'change_ticket_number': result.number,
-                        //     'active': result.active,
-                        //     'priority': result.priority,
-                        //     'description': result.description,
-                        //     'work_start': result.work_start,
-                        //     'work_end': result.work_end
-                        // }
+                        result = this.getResult(result);
                     }
                 }
                 callback(result);

@@ -80,7 +80,7 @@ class ServiceNowAdapter extends EventEmitter {
     connect() {
         // As a best practice, Itential recommends isolating the health check action
         // in its own method.
-        this.healthcheck(() => { });
+        this.healthcheck(()=>{});
     }
 
     /**
@@ -161,29 +161,8 @@ class ServiceNowAdapter extends EventEmitter {
                 callback(error);
             }
             else {
-                let body = null;
-                //log.info(`\nResponse returned from GET request:\n${JSON.stringify(data)}`);
-                if (typeof data == 'object') {
-                    if (data.body) {
-                        body = JSON.parse(data.body);
-                        let result = body.result;
-                        result.forEach((obj, index) => {
-                            result[index] = getResult(obj);
-                            // {
-                            //     'change_ticket_key': obj.sys_id,
-                            //     'change_ticket_number': obj.number,
-                            //     'active': obj.active,
-                            //     'priority': obj.priority,
-                            //     'description': obj.description,
-                            //     'work_start': obj.work_start,
-                            //     'work_end': obj.work_end
-                            // }
-                        });
-                        log.info("Retunring " + JSON.stringify(result))
-                        callback(result);
-                        //return result;
-                    }
-                }
+                console.log(`\nResponse returned from GET request:\n${JSON.stringify(data)}`)
+                callback(data);
             }
         });
     }
@@ -202,48 +181,8 @@ class ServiceNowAdapter extends EventEmitter {
             if (error) {
                 console.error(`\nError returned from POST request:\n${JSON.stringify(error)}`);
             }
-            else {
-                let result = null;
-                if (typeof data == 'object') {
-                    console.info(JSON.stringify(data));
-                    if (data.body) {
-                        let body = JSON.parse(data.body);
-                        result = body.result;
-                        result = getResult(result);
-                        // {
-                        //     'change_ticket_key': result.sys_id,
-                        //     'change_ticket_number': result.number,
-                        //     'active': result.active,
-                        //     'priority': result.priority,
-                        //     'description': result.description,
-                        //     'work_start': result.work_start,
-                        //     'work_end': result.work_end
-                        // }
-                    }
-                }
-                callback(result);
-            }
+            console.log(`\nResponse returned from POST request:\n${JSON.stringify(data)}`)
         });
-    }
-
-    /**
-     * @memberof ServiceNowAdapter
-     * @method getResult
-     * @summary Build custom result object.
-     * @description Builds a new result object from response data.
-     *
-     * @param {object} responseData - The response json result
-     */
-    getResult(responseData) {
-        return {
-            'change_ticket_key': responseData.sys_id,
-            'change_ticket_number': responseData.number,
-            'active': responseData.active,
-            'priority': responseData.priority,
-            'description': responseData.description,
-            'work_start': responseData.work_start,
-            'work_end': responseData.work_end
-        };
     }
 }
 
